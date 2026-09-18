@@ -1,166 +1,86 @@
-# CECS Golden Template — Python Project with Test Cases
+# Guidance for Faculty
 
-A starting point for a CECS course assignment: a small Python package under
-`src/`, a matching `pytest` suite under `tests/`, CI that runs on every push,
-and a Verification Log the student fills in.
+This template contains a small Python package and a `pytest` test suite. It
+integrates with GitHub Actions so that every push to GitHub checks the project.
+It can be used with Classroom 50 as the basis for an auto-graded programming
+assignment, or given to students to fork by hand when auto-grading is not
+needed.
 
-Replace the sample `stats` exercise with your own content. Keep the shape: the
-autograder and the CI both depend on it.
+The [faculty documentation](docs/faculty/README.md) explains how to adapt the
+starter code, write tests, and optionally configure a Classroom 50 instance.
+Before publishing an assignment to students, remove `docs/faculty` and this
+faculty section if they would cause confusion.
 
-> [!NOTE]
-> Files in this repo carry `FACULTY:` comments explaining why each piece is the
-> way it is. They are written for whoever adapts this next. Students can ignore
-> them, and you can strip them once your own version settles.
+## Faculty To-Do
 
-## Start here
+1. Replace the sample statistics exercise in `src/` with the assignment's
+   starter code.
+2. Replace the tests in `tests/` and update `EXPECTED_CASES` in
+   [`.github/workflows/ci.yml`](.github/workflows/ci.yml) if the number of test
+   cases changes.
+3. Edit [STUDENT_README.md](STUDENT_README.md) with the assignment requirements
+   and review the guides linked from
+   [docs/student/README.md](docs/student/README.md).
+4. Add runtime and test dependencies to
+   [requirements.txt](requirements.txt). Keep only packages the assignment
+   actually needs.
+5. Review the warning below and decide whether to keep the student publishing
+   guide.
+6. Read the [faculty documentation](docs/faculty/README.md) to understand the
+   repository layout, CI commands, and optional Classroom 50 integration.
+7. Create a GitHub template repository for the assignment, if needed.
+8. If AI assistance is allowed, review or adapt the root
+   [Verification Log](VERIFICATION-LOG.md); a clean faculty copy is available
+   at [docs/faculty/VERIFICATION-LOG.md](docs/faculty/VERIFICATION-LOG.md).
+   Otherwise, remove assignment-specific verification-log requirements.
+9. Remove faculty-only documentation, then commit and push the assignment.
 
-Never set up an autograder before? Start with the
-**[Web UI](docs/getting-started-web.md)** or
-**[CLI](docs/getting-started.md)** getting-started guide. Both go from zero to
-a verified working assignment and assume no prior experience.
+## Language-specific notes
 
-| Guide | For |
-|---|---|
-| [Getting started with the Web UI](docs/getting-started-web.md) | First-time setup in the browser, end to end |
-| [Getting started with the CLI](docs/getting-started.md) | The same path using `gh teacher` and `gh student` |
-| [Writing tests with the Web UI](docs/writing-tests-web.md) | Test types, weighting, and traps in the assignment form |
-| [Writing tests with the CLI](docs/writing-tests.md) | The same grading model using `gh teacher` and JSON specs |
-| [Troubleshooting](docs/troubleshooting.md) | Symptom → diagnosis → fix |
-| [Performance sanity check](perf/README.md) | Load testing: when to enable it, and what it does not test |
-| [Governance](docs/governance.md) | The recommended baseline (advisory, not mandatory), and what is entirely yours |
-
-The rest of this README is about this repository: its layout, its CI, and what
-to change when you make it your own.
-
-## Layout
-
-| Path | What goes here |
-|---|---|
-| `src/` | Starter code students complete. Importable as a package. |
-| `tests/` | `pytest` suite. The autograder runs this same suite. |
-| `docs/` | Assignment instructions for students. |
-| `VERIFICATION-LOG.md` | Required. The student's record of AI assistance. |
-| `.github/workflows/ci.yml` | Runs the suite on every push, so students see pass/fail without waiting on a grade. Two modes; see below. |
-| `perf/` | Performance sanity check. 75 concurrent users, latency and error-rate thresholds. **Opt-in**; see [perf/README.md](perf/README.md). |
-| `.github/workflows/core-standard.yml` | Advisory self-check against the recommended [baseline](docs/governance.md). Reports; never fails your build. |
-| `LICENSE` | MIT. Fork it, adapt it, teach with it. |
-
----
-
-## For students
+This template targets Python 3.12 in CI and uses
+[pytest](https://docs.pytest.org/) for testing. Dependencies are declared in
+[`requirements.txt`](requirements.txt) and installed with:
 
 ```bash
 python3 -m pip install -r requirements.txt
-python3 -m pytest -q
 ```
 
-Implement the functions in `src/`, run the tests locally until they pass, then
-commit and push. CI runs the same suite. Fill in `VERIFICATION-LOG.md` before
-your final push. It is part of the grade.
+Project layout:
 
----
+- Assignment logic lives in [`src/stats.py`](src/stats.py). Replace this sample
+  module with the files for your assignment while keeping `src/` importable.
+- [`src/__init__.py`](src/__init__.py) marks `src` as a package.
+- Tests live in [`tests/test_stats.py`](tests/test_stats.py) and run with
+  `python3 -m pytest -q`.
+- The starter functions raise `NotImplementedError`. Keep that pattern for
+  unfinished work: a bare `pass` silently returns `None` and makes an
+  unimplemented function look like an incorrect implementation.
+- [`.github/workflows/ci.yml`](.github/workflows/ci.yml) only verifies test
+  collection in a template repository, because the starter is intentionally
+  incomplete. A student copy runs the full suite.
 
-## For instructors
+Python discovers modules from the repository root, so new modules under `src/`
+do not need to be registered in a build file. If you rename modules or tests,
+update their imports, the CI commands, and the Classroom 50 grading commands
+together.
 
-### The one failure mode that will bite you
+## Warning about student documentation
 
-> [!CAUTION]
-> **An assignment with no `tests` block grades everything as a pass.**
+The file [docs/student/publishing.md](docs/student/publishing.md) walks students
+through publishing an approved copy of their completed assignment to a public
+GitHub profile. It tells them to wait until the semester is over, obtain the
+instructor's permission, and remove private course material first.
 
-The runner resolves a grading entrypoint in this order:
+If students should not publish completed work, replace that guide with the
+course's policy. Consider explaining how students may describe the work on a
+résumé or portfolio without releasing the source.
 
-```mermaid
-flowchart TD
-    A{"per-assignment<br/>autograder.py?"} -->|found| A1[grade with it]
-    A -->|no| B{"per-assignment<br/>tests.json?"}
-    B -->|found| B1["grade the <code>tests</code> block"]
-    B -->|no| C{"classroom-default<br/>autograder.py?"}
-    C -->|found| C1[grade with it]
-    C -->|no| D["<b>vacuous pass</b><br/>0/0 · status = success"]
-    style D fill:#ffdce0,stroke:#cf222e,color:#1a1a1a
-```
+# Guidance for Students
 
-That last step is not an error state. It is a deliberate "no autograder
-configured yet" path that returns **0/0, status success**. It looks green in every
-UI, and an empty submission gets the same result as a correct one.
+This assignment is derived from the CSULB CECS Department Golden Template, a
+starting point for faculty to create programming assignments that use a
+repeatable project layout, automated tests, and continuous integration.
 
-This is exactly how this template was found broken: it pointed at a repo with
-no code and had no `tests` block, so every push came back green and nothing
-anywhere said otherwise.
-
-> [!IMPORTANT]
-> **Once per assignment, before students see it:** push one deliberately wrong
-> submission and confirm it comes back **red**. A green run proves nothing. It is
-> what a completely unconfigured assignment also produces. Only a red run proves
-> the grader is wired up.
-
-### Two things must stay in sync
-
-1. **`tests/` must contain real tests.** An empty suite reports success.
-2. **The assignment's `tests` block must match this layout.** It lives in the
-   classroom config repo's `assignments.json`, not here. For this template:
-
-   ```json
-   "tests": [
-     { "name": "module imports", "type": "run",
-       "run": "python3 -c \"import src.stats\"", "points": 1 },
-     { "name": "pytest suite", "type": "python",
-       "setup": "python3 -m pip install --quiet -r requirements.txt",
-       "run": "python3 -m pytest -q tests/test_stats.py",
-       "timeout": 120, "points": 12 }
-   ]
-   ```
-
-   The import smoke test is worth its one point: when a student breaks the
-   import, it names that directly instead of reporting twelve confusing
-   downstream errors.
-
-### Why CI is green here but red in a student copy
-
-The starter is unimplemented on purpose: every stub raises. Running the full
-suite in *this* repo would fail 12/12 and paint the template with a red X. That
-is a poor first impression for something meant to be copied, and worse, it
-trains people to ignore a red badge.
-
-So `ci.yml` has two modes, keyed on the repo's `is_template` flag rather than a
-hardcoded name, so a fork into a new course keeps working untouched:
-
-| Repo | What CI asserts |
-|---|---|
-| **Template** (this one) | The suite collects: imports cleanly and yields `EXPECTED_CASES` cases. That is the real check for scaffolding. It catches a broken import, a renamed module, or a test lost to a duplicate name, none of which need a solution to detect. |
-| **Student copy** | Full suite, real pass/fail. Red is the point. |
-
-If you change the number of test cases, update `EXPECTED_CASES` in `ci.yml`.
-
-Detection defaults to *student* mode when `is_template` is absent from the
-event payload. That direction is deliberate. The worst case is a template
-showing red, never a student repo silently skipping its tests.
-
-### Adapting this to your course
-
-Work outward from the middle:
-
-1. Rewrite `src/` with your exercise. Stubs must raise, not `pass`.
-2. Rewrite `tests/` to match. Case count is your weighting (see the notes in
-   that file).
-3. Rewrite `docs/assignment.md`.
-4. Update the `run` paths in the `tests` block above if you rename anything.
-5. Push a wrong submission. Confirm red.
-
-Steps 1–4 are the visible work. Step 5 is the one that actually protects you,
-and it is the one people skip.
-
-### Scope note
-
-Python is the sample, not a requirement. A Node version is the same structure
-with `npm test` in place of `pytest`; the `tests` block takes any command. The
-grading contract is "a command that exits non-zero on failure," not a language.
-
----
-
-## License
-
-[MIT](LICENSE). Fork it, adapt it, teach with it, ship it in your own
-organization. The [recommended baseline](docs/governance.md) is a
-recommendation for CECS courses, not a license restriction and not a
-requirement. Take what is useful and ignore the rest.
+Read [STUDENT_README.md](STUDENT_README.md) first for the assignment
+requirements. Then use [docs/student/README.md](docs/student/README.md) for
+setup, Git, development, README-writing, and publishing guides.

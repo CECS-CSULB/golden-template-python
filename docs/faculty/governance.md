@@ -79,11 +79,11 @@ template started with.
 
 1. **Use this template** on
    [cecs-golden-template-python](https://github.com/Giacalone-CECS/cecs-golden-template-python).
-2. Replace `src/`, `tests/`, and `docs/assignment.md` with your content.
+2. Replace `src/`, `tests/`, and `STUDENT_README.md` with your content.
 3. Keep or rewrite `VERIFICATION-LOG.md` as suits your course.
 4. Push. The self-check reports what drifted. **It will not fail your build.**
 5. Wire up grading. See Getting started with the
-   [Web UI](getting-started-web.md) or the [CLI](getting-started.md).
+   [Web UI](classroom-50-setup-web.md) or the [CLI](classroom-50-setup.md).
 
 Run it yourself any time:
 
@@ -97,7 +97,7 @@ python3 .github/scripts/check_core_standard.py --json     # machine-readable
 > **`--strict` is opt-in and it's for you, not for anyone else.** If you're
 > handing a repo to a TA and want drift caught before it reaches students, add
 > `--strict` to the run step in
-> [`core-standard.yml`](../.github/workflows/core-standard.yml). Nobody else is
+> [`core-standard.yml`](../../.github/workflows/core-standard.yml). Nobody else is
 > asking you to.
 
 ## Keeping this useful

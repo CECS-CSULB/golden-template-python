@@ -3,7 +3,7 @@
 How to express "is this submission correct?" as a declarative `tests` block
 with `gh teacher`.
 
-Assumes you've been through [Getting started with the CLI](getting-started.md).
+Assumes you've been through [Getting started with the CLI](classroom-50-setup.md).
 
 > [!TIP]
 > Prefer the browser? Use
@@ -18,7 +18,7 @@ language the assignment is in.
 
 | Type | Checks | Reach for it when |
 |---|---|---|
-| `run` | A command's **exit code** | Does it compile? Does it import? Does it exit 0? |
+| `run` | A command's **exit code** | Does it import? Does a smoke check exit 0? |
 | `io` | A command's **stdout** against expected text | Program reads input, prints output |
 | `python` | A **pytest suite**, points split per case | You have real unit tests |
 
@@ -28,8 +28,8 @@ The simplest and most underrated. Exit code 0 passes.
 
 ```sh
 gh teacher assignment test add <org> <classroom> <slug> \
-    --name "compiles" --type run \
-    --run "gcc -o hello hello.c" --points 1
+    --name "module imports" --type run \
+    --run 'python3 -c "import src.stats"' --points 1
 ```
 
 Require a *specific* exit code with `--exit-code`:
@@ -39,9 +39,9 @@ Require a *specific* exit code with `--exit-code`:
     --run "./prog --selftest" --exit-code 42 --points 1
 ```
 
-**Lead with a cheap `run` test**: "it compiles," "it imports." When a student
-breaks the build, that test names the actual problem instead of letting twelve
-downstream tests fail with noise.
+**Lead with a cheap `run` test** such as "the module imports." When a student
+introduces a syntax or import error, that test names the actual problem instead
+of letting twelve downstream tests fail with noise.
 
 ### `io` — does it print the right thing?
 
@@ -114,7 +114,7 @@ gradient instead of a cliff.
 | `--name` | all | Unique within the assignment. Shown to students, so write it as feedback: "handles empty input", not "test 3". |
 | `--type` | all | `run` \| `io` \| `python` |
 | `--run` | all | The command |
-| `--setup` | all | Runs first: compile, install deps. A failure here fails the test. |
+| `--setup` | all | Runs first: install dependencies or prepare fixtures. A failure here fails the test. |
 | `--points` | all | Defaults to 0 = informational, runs but doesn't score |
 | `--timeout` | all | Seconds, 1–600. Default 10. Raise for anything installing packages. |
 | `--exit-code` | `run` | Required exit code |
@@ -416,4 +416,4 @@ read as guilt.
 > Whatever you wrote, **push a deliberately wrong submission and confirm it
 > comes back red.** A green run is exactly what an assignment with no tests at
 > all produces.
-> See [Getting started with the CLI, step 7](getting-started.md#step-7--prove-it-actually-grades).
+> See [Getting started with the CLI, step 7](classroom-50-setup.md#step-7--prove-it-actually-grades).

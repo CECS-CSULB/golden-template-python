@@ -8,7 +8,7 @@ By the end you will have a real assignment that students can accept, and you
 will have **proved** it grades correctly rather than assumed it.
 
 > [!TIP]
-> Prefer the browser? Use [Getting started with the Web UI](getting-started-web.md).
+> Prefer the browser? Use [Getting started with the Web UI](classroom-50-setup-web.md).
 >
 > Already know Classroom 50? You want the
 > [CLI Teacher Guide](https://github.com/foundation50/classroom50/wiki/CLI-Teacher-Guide)
@@ -123,7 +123,7 @@ Two rules that will save you an afternoon:
 [cecs-golden-template-python](https://github.com/Giacalone-CECS/cecs-golden-template-python).
 It has the layout, a working suite, CI, and a Verification Log, and every file
 carries `FACULTY:` comments explaining why it's shaped that way. See
-[the repo README](../README.md) for what to keep and what to change.
+[the repo README](../../README.md) for what to keep and what to change.
 
 ---
 
@@ -305,6 +305,6 @@ with the org selected and re-run `gh teacher init`.
 |---|---|
 | Write more interesting tests | [Writing tests with the CLI](writing-tests.md) |
 | Diagnose something broken | [Troubleshooting](troubleshooting.md) |
-| Adapt this template to your course | [Template README](../README.md) |
+| Adapt this template to your course | [Template README](../../README.md) |
 | Look up a `gh teacher` command | [CLI Teacher Guide](https://github.com/foundation50/classroom50/wiki/CLI-Teacher-Guide) |
 | Grade something declarative tests can't express | [Autograders wiki](https://github.com/foundation50/classroom50/wiki/Autograders) |

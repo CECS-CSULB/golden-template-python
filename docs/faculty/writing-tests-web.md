@@ -4,7 +4,7 @@ How to express "is this submission correct?" with Classroom 50's declarative
 autograding form.
 
 Assumes you've been through
-[Getting started with the Web UI](getting-started-web.md).
+[Getting started with the Web UI](classroom-50-setup-web.md).
 
 > [!TIP]
 > Prefer the terminal, JSON files, or bulk editing? Use
@@ -41,7 +41,7 @@ language the assignment is in.
 
 | Web UI type | Checks | Reach for it when |
 |---|---|---|
-| **Run command** | A command's **exit code** | Does it compile? Does it import? Does it exit 0? |
+| **Run command** | A command's **exit code** | Does it import? Does a smoke check exit 0? |
 | **Input/Output** | A command's **stdout** against expected text | Program reads input, prints output |
 | **Python (pytest)** | A **pytest suite**, points split per case | You have real unit tests |
 
@@ -55,8 +55,8 @@ Click **Add test → Run command**, then enter:
 
 | Field | Value |
 |---|---|
-| **Test name** | `Compiles` |
-| **Run command** | `gcc -o hello hello.c` |
+| **Test name** | `Module imports` |
+| **Run command** | `python3 -c "import src.stats"` |
 | **Required exit code** | `0` |
 | **Timeout (seconds)** | `10` |
 | **Points** | `1` |
@@ -64,7 +64,10 @@ Click **Add test → Run command**, then enter:
 To require a specific nonzero exit code, change **Required exit code**. For
 example, test `./prog --selftest` with required exit code `42`.
 
-**Recommendation: the first test chould be a cheap Run command test**: something like "It compiles," "It imports," etc. When a student breaks the build, that test names the actual problem instead of letting twelve downstream tests fail with confusing error messages.
+**Recommendation: make the first test a cheap Run command test**, such as
+"the module imports." When a student introduces a syntax or import error, that
+test names the actual problem instead of letting twelve downstream tests fail
+with confusing error messages.
 
 ### Input/Output — does it print the right thing?
 
@@ -79,7 +82,7 @@ For programs that read stdin and print stdout, click **Add test → Input/Output
 | **Comparison** | **Included** or **Exact** or **Regex** |
 | **Points** | `2` |
 
-**Comparison** determines the method for matching stdout to expected otuput:
+**Comparison** determines the method for matching stdout to expected output:
 
 | Comparison | Passes when | Use for |
 |---|---|---|
@@ -216,4 +219,4 @@ real teaching decision, not just a technical one.
 > Whatever you wrote, **push a deliberately wrong submission and confirm it
 > comes back red.** A green run is exactly what an autograded assignment with
 > no tests can produce. See
-> [Getting started with the Web UI, step 7](getting-started-web.md#step-7--prove-it-actually-grades).
+> [Getting started with the Web UI, step 7](classroom-50-setup-web.md#step-7--prove-it-actually-grades).
