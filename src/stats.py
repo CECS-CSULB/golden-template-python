@@ -67,7 +67,12 @@ def median(values):
     # FACULTY: the even-length rule is stated because it is genuinely ambiguous
     # — "the middle" has no single meaning for an even count, and students will
     # otherwise pick one and be marked wrong for a spec gap that is ours.
-    raise NotImplementedError("implement median()")
+    sorted_values = sorted(values)
+    middle_index = len(sorted_values) // 2
+    if len(sorted_values) % 2 == 0:
+        return sorted_values[middle_index] + sorted_values[middle_index + 1] / 2
+    else:
+        return sorted_values[middle_index]
 
 
 def mode(values):
