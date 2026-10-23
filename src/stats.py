@@ -54,7 +54,8 @@ def mean(values):
     """
     # FACULTY: raise, don't `pass` — see the module docstring. An unimplemented
     # stub must be distinguishable from a wrong answer in the score report.
-    raise NotImplementedError("implement mean()")
+    avg_value = sum(values) / len(values)
+    return avg_value
 
 
 def median(values):
